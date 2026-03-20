@@ -34,7 +34,7 @@ METRICS:
     input_is_linear: false
 DATASET:
   NAME: get_eglol_withNE_dataset
-  root: "" # file path of dataset
+  root: "/media/hzho0442/Project/Code/idea/Low-light/dataset/sde/indoor/sde_in_release" # file path of dataset
   voxel_grid_channel: 32
   img_height: 260
   img_width: 346
