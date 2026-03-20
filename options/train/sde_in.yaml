@@ -18,7 +18,7 @@ OPTIMIZER:
   NAME: "Adam"
   LR: 0.00015
   LR_SCHEDULER: cosine
-  end_epoch: 80
+  END_EPOCH: 80
   weight_decay: 0
 LOSS:
   - NAME: normal-light-reconstructed-loss
