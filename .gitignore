@@ -35,4 +35,5 @@ log*/
 out.*
 err.*
 .hostfile*
+pretrain/
 
