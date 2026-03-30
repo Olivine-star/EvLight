@@ -1,0 +1,85 @@
+# EvWDiff: Event-guided Wavelet Diffusion for Low-Light Enhancement
+# Config for SDE indoor dataset
+
+JOBS: 4
+TEST_ONLY: false
+LOG_INTERVAL: 20
+TRAIN_BATCH_SIZE: 4
+VAL_BATCH_SIZE: 1
+START_EPOCH: 0
+END_EPOCH: 100
+VAL_INTERVAL: 1
+MODEL_SANING_INTERVAL: 10
+MIX_PRECISION: false
+RESUME:
+  PATH:
+  TYPE:
+  SET_EPOCH: false
+SEED: 2333
+IS_CUDA: true
+VISUALIZE: false
+
+# Optimizer
+OPTIMIZER:
+  NAME: "Adam"
+  LR: 0.0001
+  weight_decay: 0
+
+# Dataset (reuses EvLight's SDE data loading)
+DATASET:
+  NAME: get_eglol_withNE_dataset
+  root: "/media/hzho0442/Project/Code/idea/Low-light/dataset/sde/indoor/sde_in_release"
+  voxel_grid_channel: 32
+  img_height: 260
+  img_width: 346
+  is_split_event: true
+
+# EvWDiff model configuration
+EVWDIFF:
+  ema_rate: 0.999
+
+  # Pretrained IlluminationNet from EvLight
+  pretrained_illum:
+    path: "./pretrain/sde_in.pth.tar"
+    freeze_epochs: 3
+
+  # Diffusion parameters
+  diffusion:
+    num_timesteps: 200
+    sampling_steps: 25
+    t_start_infer: 100    # Truncated diffusion: start from t=100 (T//2) instead of T-1=199
+    beta_schedule: "linear"
+    beta_start: 0.0001
+    beta_end: 0.02
+
+  # Model architecture
+  model:
+    # Illumination network
+    illum_level: 1
+    illum_base_chs: 48
+
+    # U-Net
+    unet_ch: 64
+    ch_mult: [1, 2, 3, 4]
+    num_res_blocks: 2
+    dropout: 0.0
+
+    # Event
+    voxel_grid_channel: 32
+    event_channels: 64
+    modality_dropout: 0.15
+
+    # SNR
+    snr_factor: 3.0
+
+  # Loss weights
+  loss_weights:
+    noise: 1.0
+    content: 1.0
+    hf: 0.1
+    tv: 0.01
+
+VISUALIZATION:
+  folder: ./epoch-best
+  tag: 0001
+  intermediate_visualization: false
